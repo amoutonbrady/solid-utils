@@ -2,6 +2,24 @@
 
 The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid) applications.
 
+[Live demo](https://codesandbox.io/s/solid-utils-wo5w3)
+
+## Table of content
+
+- [solid-utils](#solid-utils)
+  - [Table of content](#table-of-content)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [createApp](#createapp)
+      - [Basic usage](#basic-usage)
+      - [With providers](#with-providers)
+      - [With disposable app](#with-disposable-app)
+    - [createProvider](#createprovider)
+      - [Basic usage](#basic-usage-1)
+
+## Features
+
 * [x] Tiny in size
 * [x] Tree shakeable
 * [x] Typescript ready
@@ -12,17 +30,6 @@ The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid
 
 * [ ] Doesn't entirely support SSR just yet
 * [ ] Untested (pragmatically) - Mostly because I didn't find a proper solution yet
-
-- [solid-utils](#solid-utils)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [createApp](#createapp)
-      - [Basic usage](#basic-usage)
-      - [With providers](#with-providers)
-      - [With disposable app](#with-disposable-app)
-    - [createProvider](#createprovider)
-      - [Basic usage](#basic-usage-1)
-
 ## Installation
 
 ```bash
