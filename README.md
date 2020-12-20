@@ -15,8 +15,9 @@ The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid
       - [Basic usage](#basic-usage)
       - [With providers](#with-providers)
       - [With disposable app](#with-disposable-app)
-    - [createProvider](#createprovider)
+    - [createStore](#createstore)
       - [Basic usage](#basic-usage-1)
+      - [With props](#with-props)
 
 ## Features
 
@@ -99,14 +100,14 @@ if (module.hot) {
 }
  ```
 
-### createProvider
+### createStore
 
 A small utility that helps generate Provider & associated hook
 
 #### Basic usage
 
 ```tsx
-const [Provider, useProvider] = createProvider(
+const [Provider, useProvider] = createStore(
   { count: 0, first: 'Alexandre' },
   (set, get) => ({ 
     increment(by = 1) {
@@ -129,4 +130,33 @@ const Counter = () => {
 }
 
 render(() => <Provider><Counter /><Counter /></Provider>, document.getElementById('app'))
+```
+
+#### With props
+
+```tsx
+const [Provider, useProvider] = createStore<{ count: number }>(
+  (props) => ({ count: props.count, first: 'Alexandre' }),
+
+  (set, get) => ({ 
+    increment(by = 1) {
+        set('count', count => count + 1)
+    },
+    dynamicFullName(last) {
+        return `${get.first} ${last} ${get.count}`;
+    }
+  })
+)
+
+const Counter = () => {
+  const [state, { increment, dynamicFullName }] = useProvider()
+
+  // The count here will be synced between the two <Counter /> because it's global
+  return <>
+    <button onClick={[increment, 1]}>{state.count}</button>
+    <h1>{dynamicFullName('Mouton-Brady')}</h1>
+  </>
+}
+
+render(() => <Provider count={2}><Counter /><Counter /></Provider>, document.getElementById('app'))
 ```

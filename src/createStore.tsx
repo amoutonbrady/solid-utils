@@ -11,8 +11,15 @@ interface CreateStoreFn<A, B, C = B & { set: SetStateFunction<A> }> {
   (store: A, fn: (set: SetStateFunction<A>, get: State<A>) => B): readonly [State<A>, C];
 }
 
-function generateStore<A, B>(store: A, fn: (set: SetStateFunction<A>, get: State<A>) => B) {
-  const [get, set] = createState(store);
+type CommonObject = Record<string, any>;
+
+function generateStore<A, B, C>(
+  store: A,
+  fn: (set: SetStateFunction<A>, get: State<A>) => B,
+  props?: C,
+) {
+  const finalStore: A = typeof store === 'function' ? store(props) : store;
+  const [get, set] = createState(finalStore);
 
   return [get, { ...fn(set, get), set }] as const;
 }
@@ -45,15 +52,15 @@ function generateStore<A, B>(store: A, fn: (set: SetStateFunction<A>, get: State
  * app.mount('#app')
  * ```
  */
-export function createStore<T extends Record<string, any>, B>(
+export function createStore<P extends CommonObject, T extends CommonObject, B>(
   store: T,
   fn: (set: SetStateFunction<T>, get: State<T>) => B,
 ) {
   type Store = ReturnType<CreateStoreFn<T, B>>;
   const Context = createContext<Store>();
 
-  const Provider: Component = (props) => {
-    const value: Store = generateStore(store, fn);
+  const Provider: Component<P> = (props) => {
+    const value: Store = generateStore(store, fn, props);
 
     return <Context.Provider value={value}>{props.children}</Context.Provider>;
   };
