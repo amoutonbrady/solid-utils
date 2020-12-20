@@ -1,8 +1,6 @@
 # solid-utils
 
-The ultime companion of all your [solid-js](https://github.com/ryansolid/solid) applications.
-
-These modules are:
+The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid) applications.
 
 * [x] Tiny in size
 * [x] Tree shakeable
@@ -12,8 +10,18 @@ These modules are:
 * [x] Integrate 100% of [Skypack package best practices](https://docs.skypack.dev/package-authors/package-checks)
 * [x] ES Module, Common JS & source export (solid specific) ready
 
-* [ ] Doesn't entirelyu support SSR just yet
-* [ ] Untested (progamatically) - Mostly because I didn't find a proper solution yet
+* [ ] Doesn't entirely support SSR just yet
+* [ ] Untested (pragmatically) - Mostly because I didn't find a proper solution yet
+
+- [solid-utils](#solid-utils)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [createApp](#createapp)
+      - [Basic usage](#basic-usage)
+      - [With providers](#with-providers)
+      - [With disposable app](#with-disposable-app)
+    - [createProvider](#createprovider)
+      - [Basic usage](#basic-usage-1)
 
 ## Installation
 
@@ -32,7 +40,7 @@ $ yarn add solid-utils
 
 ### createApp
 
-A Vue 3 inspired app mounting bootstrapper that helps managing large list of global providers
+A Vue 3 inspired app mounting bootstrapper that helps manage large list of global providers
 
 #### Basic usage
 
@@ -92,25 +100,26 @@ A small utility that helps generate Provider & associated hook
 
 ```tsx
 const [Provider, useProvider] = createProvider(
-    { count: 0, first: 'Alexandre' },
-    (set, get) => ({ 
-        increment(by = 1) {
-            set('count', count => count + 1)
-        },
-        dynamicFullName(last) {
-            return `${get.first} ${last} ${get.count}`;
-        }
-    })
+  { count: 0, first: 'Alexandre' },
+  (set, get) => ({ 
+    increment(by = 1) {
+        set('count', count => count + 1)
+    },
+    dynamicFullName(last) {
+        return `${get.first} ${last} ${get.count}`;
+    }
+  })
 )
 
 const Counter = () => {
-    const [state, { increment, dynamicFullName }] = useProvider()
+  const [state, { increment, dynamicFullName }] = useProvider()
 
-    // The count here will be sync between the two <Counter /> because it's global
-    return <>
-        <button onClick={[increment, 1]}>{state.count}</button>
-        <h1>{dynamicFullName('Mouton-Brady')}</h1>
-    </>
+  // The count here will be synced between the two <Counter /> because it's global
+  return <>
+    <button onClick={[increment, 1]}>{state.count}</button>
+    <h1>{dynamicFullName('Mouton-Brady')}</h1>
+  </>
 }
+
 render(() => <Provider><Counter /><Counter /></Provider>, document.getElementById('app'))
 ```
