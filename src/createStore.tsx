@@ -5,6 +5,7 @@ import {
   createContext,
   useContext,
   Component,
+  splitProps,
 } from 'solid-js';
 
 interface GenerateStoreFn<Store, Methods, Props, C = Methods & { set: SetStateFunction<Store> }> {
@@ -20,9 +21,9 @@ function isFunction<T = Function>(fn: unknown): fn is T {
   return typeof fn === 'function';
 }
 
-function generateStore<Store extends CommonObject, Methods, Props>(
+function generateStore<Store, Methods, Props>(
   store: Store | ((props: Props) => Store),
-  fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
+  fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods = () => ({} as Methods),
   props?: Props,
 ) {
   const finalStore: Store = isFunction<(props: Props) => Store>(store) ? store(props) : store;
@@ -35,7 +36,7 @@ function generateStore<Store extends CommonObject, Methods, Props>(
  *
  *
  * @param store - An object describing your store
- * @param fn - A function returning an object that interact with the store
+ * @param methods - A function returning an object that interact with the store
  * @returns [Provider, useProvider] - A tuple Provider/useProvider
  *
  * @example
@@ -59,17 +60,28 @@ function generateStore<Store extends CommonObject, Methods, Props>(
  * app.mount('#app')
  * ```
  */
-export function createStore<Props extends CommonObject, Store extends CommonObject, Methods>(
+export function createStore<
+  Props extends CommonObject,
+  Store extends CommonObject,
+  Methods extends CommonObject
+>(
   store: Store | ((props: Props) => Store),
-  fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
+  methods?: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
+  defaultProps?: Props,
 ) {
   type FinalStore = ReturnType<GenerateStoreFn<Store, Methods, Props>>;
   const Context = createContext<FinalStore>();
 
   const Provider: Component<Props> = (props) => {
-    const value: FinalStore = generateStore(store, fn, props);
+    const finalProps = { ...(defaultProps || {}), ...(props || {}) };
+    const [internal, external] = splitProps(finalProps, ['children']);
+    const value: FinalStore = generateStore(store, methods, props);
 
-    return <Context.Provider value={value}>{props.children}</Context.Provider>;
+    return (
+      <Context.Provider {...external} value={value}>
+        {internal.children}
+      </Context.Provider>
+    );
   };
 
   return [Provider, () => useContext(Context)] as const;

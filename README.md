@@ -17,6 +17,7 @@ The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid
       - [With disposable app](#with-disposable-app)
     - [createStore](#createstore)
       - [Basic usage](#basic-usage-1)
+      - [With default props (prefered)](#with-default-props-prefered)
       - [With props](#with-props)
 
 ## Features
@@ -130,6 +131,37 @@ const Counter = () => {
 }
 
 render(() => <Provider><Counter /><Counter /></Provider>, document.getElementById('app'))
+```
+
+#### With default props (prefered)
+
+```tsx
+const [Provider, useProvider] = createStore<{ count: number }>(
+  (props) => ({ count: props.count, first: 'Alexandre' }),
+
+  (set, get) => ({ 
+    increment(by = 1) {
+        set('count', count => count + 1)
+    },
+    dynamicFullName(last) {
+        return `${get.first} ${last} ${get.count}`;
+    }
+  })
+
+  { count: 1 }, // This will auto type the props above and the <Provider> params
+)
+
+const Counter = () => {
+  const [state, { increment, dynamicFullName }] = useProvider()
+
+  // The count here will be synced between the two <Counter /> because it's global
+  return <>
+    <button onClick={[increment, 1]}>{state.count}</button>
+    <h1>{dynamicFullName('Mouton-Brady')}</h1>
+  </>
+}
+
+render(() => <Provider count={2}><Counter /><Counter /></Provider>, document.getElementById('app'))
 ```
 
 #### With props
