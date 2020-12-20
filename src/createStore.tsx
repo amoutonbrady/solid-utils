@@ -7,18 +7,25 @@ import {
   Component,
 } from 'solid-js';
 
-interface CreateStoreFn<A, B, C = B & { set: SetStateFunction<A> }> {
-  (store: A, fn: (set: SetStateFunction<A>, get: State<A>) => B): readonly [State<A>, C];
+interface GenerateStoreFn<Store, Methods, Props, C = Methods & { set: SetStateFunction<Store> }> {
+  (
+    store: Store | ((props: Props) => Store),
+    fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
+  ): readonly [State<Store>, C];
 }
 
 type CommonObject = Record<string, any>;
 
-function generateStore<A, B, C>(
-  store: A,
-  fn: (set: SetStateFunction<A>, get: State<A>) => B,
-  props?: C,
+function isFunction<T = Function>(fn: unknown): fn is T {
+  return typeof fn === 'function';
+}
+
+function generateStore<Store extends CommonObject, Methods, Props>(
+  store: Store | ((props: Props) => Store),
+  fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
+  props?: Props,
 ) {
-  const finalStore: A = typeof store === 'function' ? store(props) : store;
+  const finalStore: Store = isFunction<(props: Props) => Store>(store) ? store(props) : store;
   const [get, set] = createState(finalStore);
 
   return [get, { ...fn(set, get), set }] as const;
@@ -52,15 +59,15 @@ function generateStore<A, B, C>(
  * app.mount('#app')
  * ```
  */
-export function createStore<P extends CommonObject, T extends CommonObject, B>(
-  store: T,
-  fn: (set: SetStateFunction<T>, get: State<T>) => B,
+export function createStore<Props extends CommonObject, Store extends CommonObject, Methods>(
+  store: Store | ((props: Props) => Store),
+  fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
 ) {
-  type Store = ReturnType<CreateStoreFn<T, B>>;
-  const Context = createContext<Store>();
+  type FinalStore = ReturnType<GenerateStoreFn<Store, Methods, Props>>;
+  const Context = createContext<FinalStore>();
 
-  const Provider: Component<P> = (props) => {
-    const value: Store = generateStore(store, fn, props);
+  const Provider: Component<Props> = (props) => {
+    const value: FinalStore = generateStore(store, fn, props);
 
     return <Context.Provider value={value}>{props.children}</Context.Provider>;
   };
