@@ -1,6 +1,24 @@
 import type { Component } from 'solid-js';
 import { createComponent, render } from 'solid-js/web';
 
+interface App {
+  /**
+   * Add a Provider to the app. The list of provider will be merged
+   * at mount time.
+   *
+   * @param provider {Component} - The provider to add to the list
+   * @param opts {Record<string, any>} - The optional options
+   */
+  use(provider: Component, options?: Record<string, any>): App;
+
+  /**
+   * It first merges all the Providers and then uses the `render` function
+   * to mount the application.
+   *
+   * @param dom {HTMLElement | string} - The element to mount your app on
+   */
+  mount(domElement: HTMLElement | string): ReturnType<typeof render>;
+}
 interface Provider {
   provider: Component;
   opts?: Record<string, any>;
@@ -50,27 +68,17 @@ function mergeProviders(app: Element, providers: Provider[]) {
 export function createApp<T extends unknown>(app: T) {
   const providers: Provider[] = [];
 
-  return {
-    /**
-     * Add a Provider to the app. The list of provider will be merged
-     * at mount time.
-     *
-     * @param provider {Component} - The provider to add to the list
-     * @param opts {Record<string, any>} - The optional options
-     */
-    use(provider: Component, opts?: Record<string, any>) {
+  const _app: App = {
+    use(provider, opts) {
       providers.push({ provider, opts });
+      return _app;
     },
-    /**
-     * It first merges all the Providers and then uses the `render` function
-     * to mount the application.
-     *
-     * @param dom {HTMLElement | string} - The element to mount your app on
-     */
-    mount(dom: HTMLElement | string) {
+    mount(dom) {
       const application = mergeProviders(app as Element, providers);
       const root = typeof dom === 'string' ? document.querySelector(dom) : dom;
       return render(application, root);
     },
   };
+
+  return _app;
 }
