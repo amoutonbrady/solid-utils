@@ -17,7 +17,7 @@ The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid
       - [With disposable app](#with-disposable-app)
     - [createStore](#createstore)
       - [Basic usage](#basic-usage-1)
-      - [With default props (prefered)](#with-default-props-prefered)
+      - [With default props](#with-default-props)
       - [With props](#with-props)
 
 ## Features
@@ -71,6 +71,13 @@ app.use(I18nProvider, { dict })
 app.use(GlobalStoreProvider)
 
 app.mount('#app')
+
+// [new in 0.0.4] - Those are also chainable
+createApp(App)
+  .use(RouterProvider)
+  .use(I18nProvider, { dict })
+  .use(GlobalStoreProvider)
+  .mount('#app')
 ```
 
 into something like that:
@@ -130,10 +137,17 @@ const Counter = () => {
   </>
 }
 
-render(() => <Provider><Counter /><Counter /></Provider>, document.getElementById('app'))
+render(
+  () => 
+    <Provider>
+      <Counter />
+      <Counter />
+    </Provider>,
+  document.getElementById('app'),
+)
 ```
 
-#### With default props (prefered)
+#### With default props
 
 ```tsx
 const [Provider, useProvider] = createStore<{ count: number }>(
@@ -148,7 +162,7 @@ const [Provider, useProvider] = createStore<{ count: number }>(
     }
   })
 
-  { count: 1 }, // This will auto type the props above and the <Provider> params
+  { count: 1 }, // This will auto type the props above and the <Provider> component props
 )
 
 const Counter = () => {
@@ -161,11 +175,24 @@ const Counter = () => {
   </>
 }
 
-render(() => <Provider count={2}><Counter /><Counter /></Provider>, document.getElementById('app'))
+render(
+  () => (
+    // This `count` will be auto typed
+    <Provider count={2}>
+      <Counter />
+      <Counter />
+    </Provider>, 
+    document.getElementById('app'),
+  )
+)
 ```
 
 #### With props
 
+Not setting the third parameters prevent typescript to infer the proper types for the props interface in the first function and the `<Provider>` component returned by the `createStore`.
+
+If any Typescript ninja come accross this I'd be more than happy to know the right way to do that...
+
 ```tsx
 const [Provider, useProvider] = createStore<{ count: number }>(
   (props) => ({ count: props.count, first: 'Alexandre' }),
@@ -190,5 +217,14 @@ const Counter = () => {
   </>
 }
 
-render(() => <Provider count={2}><Counter /><Counter /></Provider>, document.getElementById('app'))
+render(
+  () => (
+    // This `count` props won't be typed...
+    <Provider count={2}>
+      <Counter />
+      <Counter />
+    </Provider>,
+    document.getElementById('app')
+  ),
+)
 ```
