@@ -75,7 +75,7 @@ export function createStore<
   const Provider: Component<Props> = (props) => {
     const finalProps = { ...(defaultProps || {}), ...(props || {}) };
     const [internal, external] = splitProps(finalProps, ['children']);
-    const value: FinalStore = generateStore(store, methods, props);
+    const value: FinalStore = generateStore(store, methods, external);
 
     return (
       <Context.Provider {...external} value={value}>
