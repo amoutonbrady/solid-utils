@@ -9,7 +9,7 @@ interface App {
    * @param provider {Component} - The provider to add to the list
    * @param opts {Record<string, any>} - The optional options
    */
-  use(provider: Component, options?: Record<string, any>): App;
+  use<Props>(provider: Component<Props>, options?: Props): App;
 
   /**
    * It first merges all the Providers and then uses the `render` function
