@@ -6,6 +6,9 @@ import {
   useContext,
   Component,
   splitProps,
+  createResource,
+  Suspense,
+  JSX,
 } from 'solid-js';
 
 interface GenerateStoreFn<Store, Methods, Props, C = Methods & { set: SetStateFunction<Store> }> {
@@ -21,12 +24,12 @@ function isFunction<T = Function>(fn: unknown): fn is T {
   return typeof fn === 'function';
 }
 
-function generateStore<Store, Methods, Props>(
+async function generateStore<Store, Methods, Props>(
   store: Store | ((props: Props) => Store),
   fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods = () => ({} as Methods),
   props?: Props,
 ) {
-  const finalStore: Store = isFunction<(props: Props) => Store>(store) ? store(props) : store;
+  const finalStore: Store = isFunction<(props: Props) => Store>(store) ? await store(props) : store;
   const [get, set] = createState(finalStore);
 
   return [get, { ...fn(set, get), set }] as const;
@@ -72,15 +75,20 @@ export function createStore<
   type FinalStore = ReturnType<GenerateStoreFn<Store, Methods, Props>>;
   const Context = createContext<FinalStore>();
 
-  const Provider: Component<Props> = (props) => {
+  const Provider: Component<Partial<Props & { loader: Component }>> = (props) => {
     const finalProps = { ...(defaultProps || {}), ...(props || {}) };
     const [internal, external] = splitProps(finalProps, ['children']);
-    const value: FinalStore = generateStore(store, methods, external);
+    const [value, loadValue] = createResource<FinalStore>();
+    loadValue(() => generateStore(store, methods, external));
+
+    const defaultLoader = () => <p>Loading...</p>;
 
     return (
-      <Context.Provider {...external} value={value}>
-        {internal.children}
-      </Context.Provider>
+      <Suspense fallback={props.loader || defaultLoader}>
+        <Context.Provider {...external} value={value()}>
+          {internal.children}
+        </Context.Provider>
+      </Suspense>
     );
   };
 
