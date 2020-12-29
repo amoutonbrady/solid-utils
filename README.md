@@ -18,6 +18,7 @@ The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid
     - [createStore](#createstore)
       - [Basic usage](#basic-usage-1)
       - [With default props](#with-default-props)
+      - [With async default props](#with-async-default-props)
       - [With props](#with-props)
 
 ## Features
@@ -179,6 +180,50 @@ render(
   () => (
     // This `count` will be auto typed
     <Provider count={2}>
+      <Counter />
+      <Counter />
+    </Provider>, 
+    document.getElementById('app'),
+  )
+)
+```
+
+#### With async default props
+
+```tsx
+const [Provider, useProvider] = createStore<{ count: number }>(
+  async (props) => {
+    const count = await fetch(props.url).then(r => r.json())
+
+    return { count, first: 'Alexandre' },
+  },
+
+  (set, get) => ({ 
+    increment(by = 1) {
+        set('count', count => count + 1)
+    },
+    dynamicFullName(last) {
+        return `${get.first} ${last} ${get.count}`;
+    }
+  })
+
+  { url: 'https://get-counter.com/json' }, // This will auto type the props above and the <Provider> component props
+)
+
+const Counter = () => {
+  const [state, { increment, dynamicFullName }] = useProvider()
+
+  // The count here will be synced between the two <Counter /> because it's global
+  return <>
+    <button onClick={[increment, 1]}>{state.count}</button>
+    <h1>{dynamicFullName('Mouton-Brady')}</h1>
+  </>
+}
+
+render(
+  () => (
+    // This `count` will be auto typed
+    <Provider count={2} loader={<p>Loading...</p>}>
       <Counter />
       <Counter />
     </Provider>, 
