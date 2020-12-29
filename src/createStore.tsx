@@ -1,55 +1,63 @@
 import {
   createState,
-  State,
-  SetStateFunction,
   createContext,
   useContext,
   Component,
   splitProps,
   createResource,
   Show,
+  State,
+  SetStateFunction,
 } from 'solid-js';
 
-interface GenerateStoreFn<Store, Methods, Props, C = Methods & { set: SetStateFunction<Store> }> {
-  (
-    store: Store | ((props: Props) => Store),
-    fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
-  ): readonly [State<Store>, C];
+type BaseObject = Record<string, any>;
+
+type GenerateStore<Store = {}, Actions = {}, Props = {}> = (options: {
+  state: (props: Props) => Promise<Store> | Store;
+  actions?: (set: SetStateFunction<Store>, get: State<Store>) => Actions;
+  props?: Props;
+}) => Promise<
+  readonly [
+    State<Store>,
+    Actions & {
+      readonly set: SetStateFunction<Store>;
+    },
+  ]
+>;
+
+interface StateFn<Props, StateResult> {
+  (props: Props): StateResult | Promise<StateResult>;
 }
 
-type CommonObject = Record<string, any>;
-
-function isFunction<T = Function>(fn: unknown): fn is T {
-  return typeof fn === 'function';
-}
-
-async function generateStore<Store, Methods, Props>(
-  store: Store | ((props: Props) => Store),
-  fn: (set: SetStateFunction<Store>, get: State<Store>) => Methods = () => ({} as Methods),
-  props?: Props,
-) {
-  const finalStore: Store = isFunction<(props: Props) => Store>(store) ? await store(props) : store;
-  const [get, set] = createState(finalStore);
-
-  return [get, { ...fn(set, get), set }] as const;
-}
+// https://stackoverflow.com/questions/48011353/how-to-unwrap-type-of-a-promise/49889856
+type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 
 /**
- *
- *
- * @param store - An object describing your store
- * @param methods - A function returning an object that interact with the store
+ * Default Loader when the store is computing the initial state
+ */
+const DefaultLoader: Component = () => <p>Loading...</p>;
+
+const generateStore: GenerateStore = async ({ state, actions, props }) => {
+  const finalStore = await state(props);
+  const [get, set] = createState(finalStore);
+  const finalActions = actions(set, get);
+
+  return [get, { ...finalActions, set }] as const;
+};
+
+/**
+ * @param options - A function An object describing your store
  * @returns [Provider, useProvider] - A tuple Provider/useProvider
  *
  * @example
  * ```tsx
- * const [Provider, useProvider] = createStore(
- *  { count: 0 },
+ * const [Provider, useProvider] = createStore({
+ *  state: () => ({ count: 0 }),
  *
- *  (set) => ({
+ *  actions: (set) => ({
  *    increment = (by = 1) => set('count', c => c + by)
  *  })
- * )
+ * })
  *
  * const App = () => {
  *  const [store, { increment }] = useStore()
@@ -63,27 +71,48 @@ async function generateStore<Store, Methods, Props>(
  * ```
  */
 export function createStore<
-  Props extends CommonObject,
-  Store extends CommonObject,
-  Methods extends CommonObject
->(
-  store: Store | ((props: Props) => Store),
-  methods?: (set: SetStateFunction<Store>, get: State<Store>) => Methods,
-  defaultProps?: Props,
-) {
-  type FinalStore = ReturnType<GenerateStoreFn<Store, Methods, Props>>;
-  const Context = createContext<FinalStore>();
+  Store extends BaseObject,
+  Actions extends BaseObject,
+  Props extends BaseObject
+>({
+  state,
+  actions,
+  props,
+}: {
+  state: StateFn<Props, Store>;
+  actions?: ReturnType<StateFn<Props, Store>> extends Promise<Store>
+    ? (
+        set: SetStateFunction<ThenArg<StateFn<Props, Store>>>,
+        get: State<ThenArg<StateFn<Props, Store>>>,
+      ) => Actions
+    : (set: SetStateFunction<Store>, get: State<Store>) => Actions;
+  props?: Props;
+}) {
+  type Return = readonly [
+    State<Store>,
+    Readonly<Actions> & {
+      readonly set: SetStateFunction<Store>;
+    },
+  ];
 
-  const Provider: Component<Partial<Props & { loader: Component }>> = (props) => {
-    const finalProps = { ...(defaultProps || {}), ...(props || {}) };
+  const Context = createContext<Return>();
+
+  const Provider: Component<Partial<Props & { loader: any }>> = (providerProps) => {
+    const finalProps = { ...(props || {}), ...(providerProps || {}) };
     const [internal, external] = splitProps(finalProps, ['children']);
-    const [value, loadValue] = createResource<FinalStore>();
-    loadValue(() => generateStore(store, methods, external));
+    const [value, loadValue] = createResource<Return>();
 
-    const defaultLoader = () => <p>Loading...</p>;
+    loadValue(
+      () =>
+        generateStore({
+          state,
+          actions,
+          props: external as Props,
+        }) as Promise<Return>,
+    );
 
     return (
-      <Show when={!value.loading} fallback={props.loader || defaultLoader}>
+      <Show when={!value.loading} fallback={finalProps.loader || DefaultLoader}>
         <Context.Provider {...external} value={value()}>
           {internal.children}
         </Context.Provider>

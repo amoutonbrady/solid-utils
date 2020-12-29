@@ -116,9 +116,10 @@ A small utility that helps generate Provider & associated hook
 #### Basic usage
 
 ```tsx
-const [Provider, useProvider] = createStore(
-  { count: 0, first: 'Alexandre' },
-  (set, get) => ({ 
+const [Provider, useProvider] = createStore({
+  state: () => ({ count: 0, first: 'Alexandre' }),
+
+  actions: (set, get) => ({ 
     increment(by = 1) {
         set('count', count => count + 1)
     },
@@ -126,7 +127,7 @@ const [Provider, useProvider] = createStore(
         return `${get.first} ${last} ${get.count}`;
     }
   })
-)
+})
 
 const Counter = () => {
   const [state, { increment, dynamicFullName }] = useProvider()
@@ -151,10 +152,10 @@ render(
 #### With default props
 
 ```tsx
-const [Provider, useProvider] = createStore<{ count: number }>(
-  (props) => ({ count: props.count, first: 'Alexandre' }),
+const [Provider, useProvider] = createStore({
+  state: (props) => ({ count: props.count, first: 'Alexandre' }),
 
-  (set, get) => ({ 
+  actions: (set, get) => ({ 
     increment(by = 1) {
         set('count', count => count + 1)
     },
@@ -163,8 +164,8 @@ const [Provider, useProvider] = createStore<{ count: number }>(
     }
   })
 
-  { count: 1 }, // This will auto type the props above and the <Provider> component props
-)
+  props: { count: 1 }, // This will auto type the props above and the <Provider> component props
+})
 
 const Counter = () => {
   const [state, { increment, dynamicFullName }] = useProvider()
@@ -191,24 +192,24 @@ render(
 #### With async default props
 
 ```tsx
-const [Provider, useProvider] = createStore<{ count: number }>(
-  async (props) => {
+const [Provider, useProvider] = createStore({
+  props: { url: 'https://get-counter.com/json' }, // This will auto type the props above and the <Provider> component props
+
+  state: async (props) => {
     const count = await fetch(props.url).then(r => r.json())
 
     return { count, first: 'Alexandre' },
   },
 
-  (set, get) => ({ 
+  actions: (set, get) => ({ 
     increment(by = 1) {
         set('count', count => count + 1)
     },
     dynamicFullName(last) {
         return `${get.first} ${last} ${get.count}`;
     }
-  })
-
-  { url: 'https://get-counter.com/json' }, // This will auto type the props above and the <Provider> component props
-)
+  }),
+})
 
 const Counter = () => {
   const [state, { increment, dynamicFullName }] = useProvider()
