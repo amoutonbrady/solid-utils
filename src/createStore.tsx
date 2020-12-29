@@ -7,8 +7,7 @@ import {
   Component,
   splitProps,
   createResource,
-  Suspense,
-  JSX,
+  Show,
 } from 'solid-js';
 
 interface GenerateStoreFn<Store, Methods, Props, C = Methods & { set: SetStateFunction<Store> }> {
@@ -84,11 +83,11 @@ export function createStore<
     const defaultLoader = () => <p>Loading...</p>;
 
     return (
-      <Suspense fallback={props.loader || defaultLoader}>
+      <Show when={!value.loading} fallback={props.loader || defaultLoader}>
         <Context.Provider {...external} value={value()}>
           {internal.children}
         </Context.Provider>
-      </Suspense>
+      </Show>
     );
   };
 
