@@ -240,10 +240,10 @@ Not setting the third parameters prevent typescript to infer the proper types fo
 If any Typescript ninja come accross this I'd be more than happy to know the right way to do that...
 
 ```tsx
-const [Provider, useProvider] = createStore<{ count: number }>(
-  (props) => ({ count: props.count, first: 'Alexandre' }),
+const [Provider, useProvider] = createStore<{ count: number }>({
+  state: (props) => ({ count: props.count, first: 'Alexandre' }),
 
-  (set, get) => ({ 
+  actions: (set, get) => ({ 
     increment(by = 1) {
         set('count', count => count + 1)
     },
@@ -251,7 +251,7 @@ const [Provider, useProvider] = createStore<{ count: number }>(
         return `${get.first} ${last} ${get.count}`;
     }
   })
-)
+})
 
 const Counter = () => {
   const [state, { increment, dynamicFullName }] = useProvider()
