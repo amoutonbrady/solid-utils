@@ -40,7 +40,7 @@ const DefaultLoader: Component = () => <p>Loading...</p>;
 const generateStore: GenerateStore = async ({ state, actions, props }) => {
   const finalStore = await state(props);
   const [get, set] = createState(finalStore);
-  const finalActions = actions(set, get);
+  const finalActions = actions ? actions(set, get) : {};
 
   return [get, { ...finalActions, set }] as const;
 };
@@ -112,7 +112,7 @@ export function createStore<
     );
 
     return (
-      <Show when={!value.loading} fallback={finalProps.loader || DefaultLoader}>
+      <Show when={!value.loading && value()} fallback={finalProps.loader || DefaultLoader}>
         <Context.Provider {...external} value={value()}>
           {internal.children}
         </Context.Provider>
