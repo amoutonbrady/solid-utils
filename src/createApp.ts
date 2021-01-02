@@ -49,20 +49,16 @@ interface Provider {
  *   document.querySelector('#app')
  *  )
  */
-function mergeProviders(app: Element, providers: Provider[]) {
-  return providers.reduceRight(
-    (application, { provider, opts }) => {
-      return () =>
-        createComponent(provider, {
-          ...opts,
+function mergeProviders(app: () => Element, providers: Provider[]) {
+  return providers.reduceRight((application, { provider, opts }) => {
+    return createComponent(provider, {
+      ...opts,
 
-          get children() {
-            return application() as Element;
-          },
-        });
-    },
-    () => app,
-  );
+      get children() {
+        return application;
+      },
+    });
+  }, createComponent(app, {}));
 }
 
 export function createApp<T extends unknown>(app: T) {
@@ -74,9 +70,9 @@ export function createApp<T extends unknown>(app: T) {
       return _app;
     },
     mount(dom) {
-      const application = mergeProviders(app as Element, providers);
+      const application = mergeProviders(app as () => Element, providers);
       const root = typeof dom === 'string' ? document.querySelector(dom) : dom;
-      return render(application, root);
+      return render(() => application, root);
     },
   };
 
