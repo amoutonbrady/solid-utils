@@ -4,18 +4,26 @@ import {
   useContext,
   Component,
   splitProps,
-  createResource,
   Show,
   State,
   SetStateFunction,
+  assignProps,
+  createSignal,
+  createEffect,
+  createComputed,
 } from 'solid-js';
 
 type BaseObject = Record<string, any>;
+
+type Effect =
+  | (() => unknown | Promise<unknown>)
+  | { pre: boolean; handler: () => unknown | Promise<unknown> };
 
 type GenerateStore<Store = {}, Actions = {}, Props = {}> = (options: {
   state: (props: Props) => Promise<Store> | Store;
   actions?: (set: SetStateFunction<Store>, get: State<Store>) => Actions;
   props?: Props;
+  effects?: (set: SetStateFunction<Store>, get: State<Store>) => Effect[];
 }) => Promise<
   readonly [
     State<Store>,
@@ -37,10 +45,22 @@ type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
  */
 const DefaultLoader: Component = () => <p>Loading...</p>;
 
-const generateStore: GenerateStore = async ({ state, actions, props }) => {
+const generateStore: GenerateStore = async ({ state, actions, props, effects = () => [] }) => {
   const finalStore = await state(props);
   const [get, set] = createState(finalStore);
   const finalActions = actions ? actions(set, get) : {};
+
+  for (const effect of effects(set, get)) {
+    if (typeof effect === 'function') {
+      createEffect(effect);
+      continue;
+    }
+
+    if (typeof effect === 'object') {
+      if (effect.pre) createComputed(effect.handler);
+      else createEffect(effect.handler);
+    }
+  }
 
   return [get, { ...finalActions, set }] as const;
 };
@@ -78,6 +98,7 @@ export function createStore<
   state,
   actions,
   props,
+  effects,
 }: {
   state: StateFn<Props, Store>;
   actions?: ReturnType<StateFn<Props, Store>> extends Promise<Store>
@@ -87,6 +108,12 @@ export function createStore<
       ) => Actions
     : (set: SetStateFunction<Store>, get: State<Store>) => Actions;
   props?: Props;
+  effects?: ReturnType<StateFn<Props, Store>> extends Promise<Store>
+    ? (
+        set: SetStateFunction<ThenArg<StateFn<Props, Store>>>,
+        get: State<ThenArg<StateFn<Props, Store>>>,
+      ) => Effect[]
+    : (set: SetStateFunction<Store>, get: State<Store>) => Effect[];
 }) {
   type Return = readonly [
     State<Store>,
@@ -98,24 +125,20 @@ export function createStore<
   const Context = createContext<Return>();
 
   const Provider: Component<Partial<Props & { loader: any }>> = (providerProps) => {
-    const finalProps = { ...(props || {}), ...(providerProps || {}) };
+    const finalProps = assignProps({}, props || {}, providerProps);
     const [internal, external] = splitProps(finalProps, ['children']);
-    const [value, loadValue] = createResource<Return>();
+    const [value, setValue] = createSignal<Return>();
 
-    loadValue(
-      () =>
-        generateStore({
-          state,
-          actions,
-          props: external as Props,
-        }) as Promise<Return>,
-    );
+    generateStore({
+      state,
+      actions,
+      effects,
+      props: (external as unknown) as Props,
+    }).then(setValue);
 
     return (
-      <Show when={!value.loading && value()} fallback={finalProps.loader || DefaultLoader}>
-        <Context.Provider {...external} value={value()}>
-          {internal.children}
-        </Context.Provider>
+      <Show when={!!value()} fallback={finalProps.loader || DefaultLoader}>
+        <Context.Provider value={value()}>{internal.children}</Context.Provider>
       </Show>
     );
   };
