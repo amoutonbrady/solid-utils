@@ -1,0 +1,20 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "Alexandre Mouton-Brady",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-preset-solid": "^0.23.8",
+    "vite": "^2.0.0-beta.5",
+    "vite-plugin-solid": "^0.6.0"
+  },
+  "dependencies": {
+    "solid-js": "^0.23.8"
+  }
+}
