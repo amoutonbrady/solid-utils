@@ -9,21 +9,17 @@ import {
   SetStateFunction,
   assignProps,
   createSignal,
-  createEffect,
   createComputed,
 } from 'solid-js';
 
 type BaseObject = Record<string, any>;
 
-type Effect =
-  | (() => unknown | Promise<unknown>)
-  | { pre: boolean; handler: () => unknown | Promise<unknown> };
+type Effect = () => unknown | Promise<unknown>;
 
 type GenerateStore<Store = {}, Actions = {}, Props = {}> = (options: {
   state: (props: Props) => Promise<Store> | Store;
-  actions?: (set: SetStateFunction<Store>, get: State<Store>) => Actions;
+  actions?: (set: SetStateFunction<Store>, get: State<Store>, props: Props) => Actions;
   props?: Props;
-  effects?: (set: SetStateFunction<Store>, get: State<Store>) => Effect[];
 }) => Promise<
   readonly [
     State<Store>,
@@ -45,24 +41,12 @@ type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
  */
 const DefaultLoader: Component = () => <p>Loading...</p>;
 
-const generateStore: GenerateStore = async ({ state, actions, props, effects = () => [] }) => {
+const generateStore: GenerateStore = async ({ state, actions, props }) => {
   const finalStore = await state(props);
   const [get, set] = createState(finalStore);
-  const finalActions = actions ? actions(set, get) : {};
+  const finalActions = actions ? actions(set, get, props) : {};
 
-  for (const effect of effects(set, get)) {
-    if (typeof effect === 'function') {
-      createEffect(effect);
-      continue;
-    }
-
-    if (typeof effect === 'object') {
-      if (effect.pre) createComputed(effect.handler);
-      else createEffect(effect.handler);
-    }
-  }
-
-  return [get, { ...finalActions, set }] as const;
+  return [get, assignProps(finalActions, set) as any] as const;
 };
 
 /**
@@ -105,15 +89,17 @@ export function createStore<
     ? (
         set: SetStateFunction<ThenArg<StateFn<Props, Store>>>,
         get: State<ThenArg<StateFn<Props, Store>>>,
+        props: Props,
       ) => Actions
-    : (set: SetStateFunction<Store>, get: State<Store>) => Actions;
+    : (set: SetStateFunction<Store>, get: State<Store>, props: Props) => Actions;
   props?: Props;
   effects?: ReturnType<StateFn<Props, Store>> extends Promise<Store>
     ? (
         set: SetStateFunction<ThenArg<StateFn<Props, Store>>>,
         get: State<ThenArg<StateFn<Props, Store>>>,
+        props: Props,
       ) => Effect[]
-    : (set: SetStateFunction<Store>, get: State<Store>) => Effect[];
+    : (set: SetStateFunction<Store>, get: State<Store>, props: Props) => Effect[];
 }) {
   type Return = readonly [
     State<Store>,
@@ -132,9 +118,16 @@ export function createStore<
     generateStore({
       state,
       actions,
-      effects,
       props: (external as unknown) as Props,
-    }).then(setValue);
+    }).then((store: any) => {
+      setValue(store);
+
+      if (!effects) return;
+
+      for (const effect of effects(store[1], store[0], (external as unknown) as Props)) {
+        createComputed(effect);
+      }
+    });
 
     return (
       <Show when={!!value()} fallback={finalProps.loader || DefaultLoader}>

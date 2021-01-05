@@ -58,7 +58,7 @@ function mergeProviders(app: () => Element, providers: Provider[]) {
         return application;
       },
     });
-  }, createComponent(app, {}));
+  }, app);
 }
 
 export function createApp<T extends unknown>(app: T) {
