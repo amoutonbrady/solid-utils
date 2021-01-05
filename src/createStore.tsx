@@ -46,7 +46,7 @@ const generateStore: GenerateStore = async ({ state, actions, props }) => {
   const [get, set] = createState(finalStore);
   const finalActions = actions ? actions(set, get, props) : {};
 
-  return [get, assignProps(finalActions, set) as any] as const;
+  return [get, { ...finalActions, set } as any] as const;
 };
 
 /**
