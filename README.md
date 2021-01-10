@@ -11,12 +11,16 @@ The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid
   - [Features](#features)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [createApp](#createapp)
+    - [createGlobalState](#createglobalstate)
       - [Basic usage](#basic-usage)
+    - [createGlobalSignal](#createglobalsignal)
+      - [Basic usage](#basic-usage-1)
+    - [createApp](#createapp)
+      - [Basic usage](#basic-usage-2)
       - [With providers](#with-providers)
       - [With disposable app](#with-disposable-app)
     - [createStore](#createstore)
-      - [Basic usage](#basic-usage-1)
+      - [Basic usage](#basic-usage-3)
       - [With default props](#with-default-props)
       - [With async default props](#with-async-default-props)
       - [With props](#with-props)
@@ -32,7 +36,7 @@ The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid
 * [x] ES Module, Common JS & source export (solid specific) ready
 
 * [ ] Doesn't entirely support SSR just yet
-* [ ] Untested (pragmatically) - Mostly because I didn't find a proper solution yet
+* [ ] Untested (programmatically) - Mostly because I didn't find a proper solution yet
 ## Installation
 
 ```bash
@@ -47,6 +51,76 @@ $ yarn add solid-utils
 ```
 
 ## Usage
+
+You can find examples that outline all the utilities in the [playground](./playground/index.tsx) file.
+
+### createGlobalState
+
+A wrapper around `createState` that allows you to declare it at the global level.
+This essentially work by being managed in its own reactive context, removing the needs to be within your application.
+
+Although this can be useful and seem to be the better approach, there's a reason this wasn't part of core.
+This should act as an escape hatch for those who migrate from more permissive libraries such as `react`, `vue` or `svelte`.
+
+This accept the exact same parameters than `createState` from `solid-js`.
+
+#### Basic usage
+
+```tsx
+import { createGlobalState } from 'solid-utils';
+
+const [state, setState] = createGlobalState({ count: 0 })
+
+const Counter = () => <button onClick={() => setState('count', c => c + 1)}>{state.count}</button>
+
+const App = () => {
+  return <>
+    <Counter />
+
+    <div>
+      The current value of count is: {state.count}
+      I can increment <button onClick={() => setState('count', c => c + 1)}>here</button>
+      or within my <code>`Counter`</code> component.
+    </div>
+  </>
+}
+
+render(App, document.getElementById('app'))
+```
+
+### createGlobalSignal
+
+A wrapper around `createSignal` that allows you to declare it at the global level.
+This essentially work by being managed in its own reactive context, removing the needs to be within your application.
+
+Although this can be useful and seem to be the better approach, there's a reason this wasn't part of core.
+This should act as an escape hatch for those who migrate from more permissive libraries such as `react`, `vue` or `svelte`.
+
+This accept the exact same parameters than `createSignal` from `solid-js`.
+
+#### Basic usage
+
+```tsx
+import { createGlobalSignal } from 'solid-utils';
+
+const [count, setCount] = createGlobalSignal(0)
+
+const Counter = () => <button onClick={() => setCount(count() + 1)}>{count()}</button>
+
+const App = () => {
+  return <>
+    <Counter />
+
+    <div>
+      The current value of count is: {count()}
+      I can increment <button onClick={() => setCount(count() + 1)}>here</button>
+      or within my <code>`Counter`</code> component.
+    </div>
+  </>
+}
+
+render(App, document.getElementById('app'))
+```
 
 ### createApp
 
