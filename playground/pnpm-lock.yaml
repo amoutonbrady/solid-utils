@@ -1,5 +1,5 @@
 dependencies:
-  solid-js: 0.23.8
+  solid-js: 0.23.10
 devDependencies:
   babel-preset-solid: 0.23.8
   vite: 2.0.0-beta.5
@@ -426,7 +426,12 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
+  /solid-js/0.23.10:
+    dev: false
+    resolution:
+      integrity: sha512-zx16IuamuaSmMZ9mNjIU+RiqAOrfIEzMqVdAS74llix8r+p1NQ2zEk5unsuuTlJUY7DaN4LWOUTh2c8Zy7cG6g==
   /solid-js/0.23.8:
+    dev: true
     resolution:
       integrity: sha512-MeJ/7dYFWR5egqtmTwuNlxV9K5MlSF4Ji6Gec/r/f5Cy64npWdXC6pl7cnpUlEpnhl34VJbBkkQWXVDQdqmePg==
   /source-map/0.5.7:
@@ -481,6 +486,6 @@ packages:
       integrity: sha512-pKl1GPmHP+Sjp5tAahhZFwS92aIXhMBAvsPCtFqqlSVhldgKLGF13u2gWuJZbdiSh/sjY3c9RJg4RFyXoFw+0w==
 specifiers:
   babel-preset-solid: ^0.23.8
-  solid-js: ^0.23.8
+  solid-js: ^0.23.10
   vite: ^2.0.0-beta.5
   vite-plugin-solid: ^0.6.0
