@@ -1,6 +1,6 @@
 {
   "name": "solid-utils",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Your best companion for any solid project",
   "source": "./dist/source/index.jsx",
   "main": "./dist/cjs/index.js",
