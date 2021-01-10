@@ -10,7 +10,7 @@ const extensions = ['.js', '.ts', '.tsx'];
  * @type {import('rollup').RollupOptions}
  */
 const config = {
-  input: 'src/index.ts',
+  input: 'src/index.tsx',
   output: [
     {
       name: pkg.name,
