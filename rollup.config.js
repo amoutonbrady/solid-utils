@@ -1,5 +1,6 @@
 import del from 'rollup-plugin-delete';
 import { babel } from '@rollup/plugin-babel';
+import analyze from 'rollup-plugin-analyzer';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 import pkg from './package.json';
@@ -36,6 +37,8 @@ const config = {
       babelHelpers: 'bundled',
       presets: ['babel-preset-solid', '@babel/preset-typescript'],
     }),
+
+    analyze({ summaryOnly: true }),
   ],
 };
 
