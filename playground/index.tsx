@@ -1,4 +1,4 @@
-import { createApp, createStore, createGlobalState, createGlobalSignal } from '..';
+import { createApp, createStore, createGlobalState, createGlobalSignal } from '../src';
 
 const [globalState, setGlobalState] = createGlobalState({ name: 'hello' });
 const [globalSignal, setGlobalSignal] = createGlobalSignal(20);
@@ -6,7 +6,7 @@ const [globalSignal, setGlobalSignal] = createGlobalSignal(20);
 const [Provider, useProvider] = createStore({
   state: (props) => ({ count: props.count }),
   actions: (set) => ({ inc: () => set('count', (c) => c + 1) }),
-  effects: (_, get) => [() => console.log(get.count)],
+  effects: (set, get) => [() => console.log(get.count)],
   props: { count: 0 },
 });
 

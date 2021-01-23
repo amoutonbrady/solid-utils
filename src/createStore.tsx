@@ -10,6 +10,8 @@ import {
   assignProps,
   createSignal,
   createComputed,
+  createEffect,
+  createMemo,
 } from 'solid-js';
 
 type BaseObject = Record<string, any>;
@@ -19,6 +21,7 @@ type Effect = () => unknown | Promise<unknown>;
 type GenerateStore<Store = {}, Actions = {}, Props = {}> = (options: {
   state: (props: Props) => Promise<Store> | Store;
   actions?: (set: SetStateFunction<Store>, get: State<Store>, props: Props) => Actions;
+  effects?: (set: SetStateFunction<Store>, get: State<Store>, props: Props) => Effect[];
   props?: Props;
 }) => Promise<
   readonly [
@@ -41,12 +44,18 @@ type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
  */
 const DefaultLoader: Component = () => <p>Loading...</p>;
 
-const generateStore: GenerateStore = async ({ state, actions, props }) => {
+const generateStore: GenerateStore = async ({ state, actions, effects, props }) => {
   const finalStore = await state(props);
   const [get, set] = createState(finalStore);
   const finalActions = actions ? actions(set, get, props) : {};
 
-  return [get, { ...finalActions, set } as any] as const;
+  if (effects) {
+    for (const effect of effects(set, get, props)) {
+      createComputed(effect);
+    }
+  }
+
+  return [get, assignProps(finalActions, { set }) as any] as const;
 };
 
 /**
@@ -118,16 +127,9 @@ export function createStore<
     generateStore({
       state,
       actions,
+      effects,
       props: (external as unknown) as Props,
-    }).then((store: any) => {
-      setValue(store);
-
-      if (!effects) return;
-
-      for (const effect of effects(store[1], store[0], (external as unknown) as Props)) {
-        createComputed(effect);
-      }
-    });
+    }).then(setValue);
 
     return (
       <Show when={!!value()} fallback={finalProps.loader || DefaultLoader}>

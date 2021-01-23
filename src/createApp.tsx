@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js';
+import type { JSX, Component } from 'solid-js';
 import { createComponent, render } from 'solid-js/web';
 
 interface App {
@@ -50,22 +50,22 @@ interface Provider {
  *  )
  */
 function mergeProviders(app: () => Element, providers: Provider[]) {
-  return providers.reduceRight((application, { provider, opts }) => {
+  return providers.reduceRight<JSX.Element | undefined>((application, { provider, opts }) => {
     return createComponent(provider, {
       ...opts,
 
       get children() {
-        return application;
+        return application || createComponent(app, {});
       },
     });
-  }, app);
+  }, undefined);
 }
 
 export function createApp<T extends unknown>(app: T) {
   const providers: Provider[] = [];
 
   const _app: App = {
-    use(provider, opts) {
+    use(provider, opts = {} as any) {
       providers.push({ provider, opts });
       return _app;
     },
