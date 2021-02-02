@@ -10,8 +10,6 @@ import {
   assignProps,
   createSignal,
   createComputed,
-  createEffect,
-  createMemo,
 } from 'solid-js';
 
 type BaseObject = Record<string, any>;
