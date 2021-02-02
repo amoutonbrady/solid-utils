@@ -1,9 +1,11 @@
 dependencies:
+  solid-app-router: 0.0.20_solid-js@0.23.11
   solid-js: 0.23.11
+  solid-meta: 0.23.11_solid-js@0.23.11
 devDependencies:
   babel-preset-solid: 0.23.8
-  vite: 2.0.0-beta.44
-  vite-plugin-solid: 0.7.0
+  vite: 2.0.0-beta.62
+  vite-plugin-solid: 0.7.1
 lockfileVersion: 5.2
 packages:
   /@babel/code-frame/7.12.11:
@@ -25,7 +27,7 @@ packages:
       convert-source-map: 1.7.0
       debug: 4.3.1
       gensync: 1.0.0-beta.2
-      json5: 2.1.3
+      json5: 2.2.0
       lodash: 4.17.20
       semver: 5.7.1
       source-map: 0.5.7
@@ -291,12 +293,12 @@ packages:
         optional: true
     resolution:
       integrity: sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
-  /esbuild/0.8.34:
+  /esbuild/0.8.39:
     dev: true
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha512-tnr0V1ooakYr1aRLXQLzCn2GVG1kBTW3FWpRyC+NgrR3ntsouVpJOlTOV0BS4YLATx3/c+x3h/uBq9lWJlUAtQ==
+      integrity: sha512-/do5H74a5ChyeKRWfkDh3EpICXpsz6dWTtFFbotb7BlIHvWqnRrZYDb8IBubOHdEtKzuiksilRO19aBtp3/HHQ==
   /escape-string-regexp/1.0.5:
     dev: true
     engines:
@@ -313,6 +315,15 @@ packages:
       - darwin
     resolution:
       integrity: sha512-Auw9a4AxqWpa9GUfj370BMPzzyncfBABW8Mab7BGWBYDj4Isgq+cDKtx0i6u9jcX9pQDnswsaaOTgTmA5pEjuQ==
+  /fsevents/2.3.1:
+    dev: true
+    engines:
+      node: ^8.16.0 || ^10.6.0 || >=11.0.0
+    optional: true
+    os:
+      - darwin
+    resolution:
+      integrity: sha512-YR47Eg4hChJGAB1O3yEAOkGO+rlzutoICGqGo9EZ4lKWokzZRSyIW1QmTzqjtw8MJdj9srP869CuWw/hyzSiBw==
   /function-bind/1.1.1:
     dev: true
     resolution:
@@ -360,7 +371,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
-  /json5/2.1.3:
+  /json5/2.2.0:
     dependencies:
       minimist: 1.2.5
     dev: true
@@ -368,7 +379,7 @@ packages:
       node: '>=6'
     hasBin: true
     resolution:
-      integrity: sha512-KXPvOm8K9IJKFM0bmdn8QXh7udDh1g/giieX0NLCaMnb4hEiVFqnop2ImTXCc5e0/oHz3LTqmHGtExn5hfMkOA==
+      integrity: sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==
   /lodash/4.17.20:
     dev: true
     resolution:
@@ -402,6 +413,12 @@ packages:
       node: ^10 || ^12 || >=14
     resolution:
       integrity: sha512-kRFftRoExRVXZlwUuay9iC824qmXPcQQVzAjbCCgjpXnkdMCJYBu2gTwAaFBzv8ewND6O8xFb3aELmEkh9zTzg==
+  /resolve.exports/1.0.2:
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-1+PDdTR3xrGWB/NzXLkzS1+PQlJ+BOR2baBGJSVat4HasiY1mnkyAQws3FUTmBDB79oK54QFaDM8Ig9nUtJwvQ==
   /resolve/1.19.0:
     dependencies:
       is-core-module: 2.2.0
@@ -409,15 +426,15 @@ packages:
     dev: true
     resolution:
       integrity: sha512-rArEXAgsBG4UgRGcynxWIWKFvh/XZCcS8UJdHhwy91zwAvCZIbcs+vAbflgBnNjYMs/i/i+/Ux6IZhML1yPvxg==
-  /rollup/2.38.0:
+  /rollup/2.38.4:
     dev: true
     engines:
       node: '>=10.0.0'
     hasBin: true
     optionalDependencies:
-      fsevents: 2.1.3
+      fsevents: 2.3.1
     resolution:
-      integrity: sha512-ay9zDiNitZK/LNE/EM2+v5CZ7drkB2xyDljvb1fQJCGnq43ZWRkhxN145oV8GmoW1YNi4sA/1Jdkr2LfawJoXw==
+      integrity: sha512-B0LcJhjiwKkTl79aGVF/u5KdzsH8IylVfV56Ut6c9ouWLJcUK17T83aZBetNYSnZtXf2OHD4+2PbmRW+Fp5ulg==
   /safe-buffer/5.1.2:
     dev: true
     resolution:
@@ -427,9 +444,25 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
+  /solid-app-router/0.0.20_solid-js@0.23.11:
+    dependencies:
+      solid-js: 0.23.11
+    dev: false
+    peerDependencies:
+      solid-js: ^0.23.0
+    resolution:
+      integrity: sha512-99BJLefBbyr065qdpLYZf3hjDRPTvSipg2ZR16dJ/yvXXIplOvCR3VuGzQbhsa54ES7tizuhzsZcLo+GmKvmDg==
   /solid-js/0.23.11:
     resolution:
       integrity: sha512-AuDF3QWf99MMHkLjHN03OzvH7eyhCVOeMGmvKMb3ScFo5vkSgACN+GJs4K+DcUxx9TMbxMPHqodn4b1meD3sIw==
+  /solid-meta/0.23.11_solid-js@0.23.11:
+    dependencies:
+      solid-js: 0.23.11
+    dev: false
+    peerDependencies:
+      solid-js: ^0.23.0
+    resolution:
+      integrity: sha512-J2L9smSBYJipXMmMWIRlZxt+CKt6JA3npGYoSbVMppN7B1OMmMXaU9XGM2QNc+1JMo2G6hEd41JJ2+tTPOMa6A==
   /source-map/0.5.7:
     dev: true
     engines:
@@ -456,22 +489,23 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4=
-  /vite-plugin-solid/0.7.0:
+  /vite-plugin-solid/0.7.1:
     dependencies:
       '@babel/core': 7.12.10
       '@babel/preset-typescript': 7.12.7_@babel+core@7.12.10
       babel-preset-solid: 0.23.8
+      resolve.exports: 1.0.2
       solid-js: 0.23.11
-      vite: 2.0.0-beta.44
+      vite: 2.0.0-beta.61
     dev: true
     resolution:
-      integrity: sha512-gU0xb5zFpjIZiCvPpyir5fSBDIUPC2S32NYdJ9x8pbA/W0J/bzfB5yw2DTa7ZQoFXfnkNWZsEdsjkGXhw0aHTw==
-  /vite/2.0.0-beta.44:
+      integrity: sha512-XM2UX1fCru6nKamOPrM/9OaT1tFnr0kgkd33KdJ107nEmjOAE228LrrZlX1WdUiesd9a/HRfydpLw2S9gm0+yA==
+  /vite/2.0.0-beta.61:
     dependencies:
-      esbuild: 0.8.34
+      esbuild: 0.8.39
       postcss: 8.2.4
       resolve: 1.19.0
-      rollup: 2.38.0
+      rollup: 2.38.4
     dev: true
     engines:
       node: '>=12.0.0'
@@ -479,9 +513,25 @@ packages:
     optionalDependencies:
       fsevents: 2.1.3
     resolution:
-      integrity: sha512-NTzmP7HEKDg3J5r3I22f87jK3ugPVEU81BQ8hWn3hNWU0msCziUlj7aHwItSUEbQA+ymqO3TBO2fN7Aa+OKckQ==
+      integrity: sha512-NyRZ7vCwtfw/z18HmFr5ZIesum26Dg9x4ykuit1YmYsZlPxx/oF3il1U6MqkXZD2wy8HaR5fQi9d9B/6vEJMbw==
+  /vite/2.0.0-beta.62:
+    dependencies:
+      esbuild: 0.8.39
+      postcss: 8.2.4
+      resolve: 1.19.0
+      rollup: 2.38.4
+    dev: true
+    engines:
+      node: '>=12.0.0'
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.1.3
+    resolution:
+      integrity: sha512-75RF5H/8Ta2UvTSjiK5EslyTkUTgRMgkeVRDHqlfDNAJUI8+gvXzhEdTpq2bsASjvnlSytBk+odtCxikEoibbg==
 specifiers:
   babel-preset-solid: ^0.23.8
+  solid-app-router: ^0.0.20
   solid-js: ^0.23.11
-  vite: ^2.0.0-beta.44
-  vite-plugin-solid: ^0.7.0
+  solid-meta: ^0.23.11
+  vite: ^2.0.0-beta.62
+  vite-plugin-solid: ^0.7.1
