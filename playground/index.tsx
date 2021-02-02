@@ -1,3 +1,6 @@
+import { Router, Route, RouteDefinition, Link } from 'solid-app-router';
+import { Component } from 'solid-js';
+import { MetaProvider, Title } from 'solid-meta';
 import { createApp, createStore, createGlobalState, createGlobalSignal } from '../src';
 
 const [globalState, setGlobalState] = createGlobalState({ name: 'hello' });
@@ -12,11 +15,13 @@ const [Provider, useProvider] = createStore({
 
 const Name = () => <h1>Watch me also change name here: {globalState.name}</h1>;
 
-const App = () => {
+const Home = () => {
   const [state, { inc }] = useProvider();
 
   return (
     <>
+      <Title>Home</Title>
+
       <h1>
         My name is: {globalState.name} and I'm: {globalSignal()}
       </h1>
@@ -41,4 +46,38 @@ const App = () => {
   );
 };
 
-createApp(App).use(Provider).mount('#app');
+const About = () => (
+  <>
+    <Title>About</Title>
+    <h1>About</h1>
+  </>
+);
+
+const App: Component<{ name: string }> = (props) => {
+  return (
+    <>
+      <Link href="/">Home</Link>
+      <Link href="/about">About</Link>
+      <hr />
+      <h1>Global name {props.name}</h1>
+      <Route />
+    </>
+  );
+};
+
+const routes: RouteDefinition[] = [
+  {
+    path: '/',
+    component: Home,
+  },
+  {
+    path: '/about',
+    component: About,
+  },
+];
+
+createApp(App, { name: 'Alexandre' })
+  .use(Router, { routes })
+  .use(MetaProvider)
+  .use(Provider)
+  .mount('#app');

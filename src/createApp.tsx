@@ -1,5 +1,5 @@
-import type { JSX, Component } from 'solid-js';
-import { createComponent, render } from 'solid-js/web';
+import type { Component, JSX } from 'solid-js';
+import { createComponent as component, render } from 'solid-js/web';
 
 interface App {
   /**
@@ -19,9 +19,16 @@ interface App {
    */
   mount(domElement: HTMLElement | string): ReturnType<typeof render>;
 }
+
 interface Provider {
   provider: Component;
   opts?: Record<string, any>;
+}
+
+interface MergeParams {
+  app: (props?: Record<string, any>) => JSX.Element;
+  props: Record<string, any>;
+  providers: Provider[];
 }
 
 /**
@@ -49,19 +56,21 @@ interface Provider {
  *   document.querySelector('#app')
  *  )
  */
-function mergeProviders(app: () => Element, providers: Provider[]) {
-  return providers.reduceRight<JSX.Element | undefined>((application, { provider, opts }) => {
-    return createComponent(provider, {
-      ...opts,
+function mergeProviders({ app, props = {}, providers }: MergeParams) {
+  return providers.reduceRight(
+    (application, { provider, opts = {} }) => () =>
+      component(provider, {
+        ...opts,
 
-      get children() {
-        return application || createComponent(app, {});
-      },
-    });
-  }, undefined);
+        get children() {
+          return application();
+        },
+      }),
+    () => component(app, props),
+  );
 }
 
-export function createApp<T extends unknown>(app: T) {
+export function createApp<AppProps>(app: (props?: AppProps) => JSX.Element, props?: AppProps) {
   const providers: Provider[] = [];
 
   const _app: App = {
@@ -69,10 +78,11 @@ export function createApp<T extends unknown>(app: T) {
       providers.push({ provider, opts });
       return _app;
     },
+
     mount(dom) {
-      const application = mergeProviders(app as () => Element, providers);
+      const application = mergeProviders({ app, props, providers });
       const root = typeof dom === 'string' ? document.querySelector(dom) : dom;
-      return render(() => application, root);
+      return render(application, root);
     },
   };
 
