@@ -23,7 +23,8 @@
     "build": "rollup -c && tsc",
     "format": "prettier -w \"**/*.{js,ts,tsx,json}\"",
     "check": "package-check",
-    "prepublishOnly": "pnpm check && pnpm build"
+    "prepublishOnly": "pnpm check && pnpm build",
+    "changelog": "pnpx gitmoji-changelog"
   },
   "files": [
     "dist"
