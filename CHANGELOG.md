@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="0.3.1"></a>
+## 0.3.1 (2021-02-03)
+
+### Added
+
+- ✨ Adding changelog [[2ec94c4](https://github.com/amoutonbrady/solid-utils/commit/2ec94c4952e1054ad13ff1ef8b3f46eeeef44c85)]
+
+### Fixed
+
+- 🐛 Fixing package.json mapping export error [[e1dda0d](https://github.com/amoutonbrady/solid-utils/commit/e1dda0d8cd588d4fcb58d32d8e9b5e7dffb06348)]
+
+
 <a name="0.3.0"></a>
 ## 0.3.0 (2021-02-02)
 
