@@ -13,7 +13,7 @@
   "devDependencies": {
     "babel-preset-solid": "^0.24.0",
     "vite": "^2.0.0-beta.64",
-    "vite-plugin-solid": "^0.7.1"
+    "vite-plugin-solid": "^0.8.0"
   },
   "dependencies": {
     "solid-app-router": "^0.0.21",
