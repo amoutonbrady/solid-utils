@@ -1,5 +1,20 @@
 # Changelog
 
+<a name="0.4.0"></a>
+## 0.4.0 (2021-02-04)
+
+### Changed
+
+- ♻️ Align with solid 0.24.x changes [[7a5c6a0](https://github.com/amoutonbrady/solid-utils/commit/7a5c6a0e5dbad0d907c34257e447a14289219c21)]
+- ⬆️ Update vite to latest plugin [[448a1d2](https://github.com/amoutonbrady/solid-utils/commit/448a1d29a8578f4709d62f9e9ed8648acdd3290f)]
+- ⬆️ Update playground dependencies [[e6d8798](https://github.com/amoutonbrady/solid-utils/commit/e6d8798016c619d4f25a415eb71fe3dab6120148)]
+- ⬆️ Update dependencies [[84faf94](https://github.com/amoutonbrady/solid-utils/commit/84faf945cccf7f09feffb68f621461a8d776cf3e)]
+
+### Miscellaneous
+
+- 📦 Updating changelog [[f89cdbf](https://github.com/amoutonbrady/solid-utils/commit/f89cdbf6ef551015fa6bb4475d604c738c493ce8)]
+
+
 <a name="0.3.1"></a>
 ## 0.3.1 (2021-02-03)
 
