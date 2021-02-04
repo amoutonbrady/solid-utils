@@ -7,7 +7,7 @@ import {
   Show,
   State,
   SetStateFunction,
-  assignProps,
+  mergeProps,
   createSignal,
   createComputed,
 } from 'solid-js';
@@ -53,7 +53,7 @@ const generateStore: GenerateStore = async ({ state, actions, effects, props }) 
     }
   }
 
-  return [get, assignProps(finalActions, { set }) as any] as const;
+  return [get, { ...finalActions, set }] as const;
 };
 
 /**
@@ -118,7 +118,7 @@ export function createStore<
   const Context = createContext<Return>();
 
   const Provider: Component<Partial<Props & { loader: any }>> = (providerProps) => {
-    const finalProps = assignProps({}, props || {}, providerProps);
+    const finalProps = mergeProps(props || {}, providerProps);
     const [internal, external] = splitProps(finalProps, ['children']);
     const [value, setValue] = createSignal<Return>();
 

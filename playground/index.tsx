@@ -1,27 +1,24 @@
-import { Router, Route, RouteDefinition, Link } from 'solid-app-router';
-import { Component } from 'solid-js';
-import { MetaProvider, Title } from 'solid-meta';
 import { createApp, createStore, createGlobalState, createGlobalSignal } from '../src';
 
-const [globalState, setGlobalState] = createGlobalState({ name: 'hello' });
+const [globalState, setGlobalState] = createGlobalState({ name: 'Alexandre' });
 const [globalSignal, setGlobalSignal] = createGlobalSignal(20);
 
 const [Provider, useProvider] = createStore({
   state: (props) => ({ count: props.count }),
-  actions: (set) => ({ inc: () => set('count', (c) => c + 1) }),
-  effects: (set, get) => [() => console.log(get.count)],
+  actions: (set) => ({
+    inc: () => set('count', (c) => c + 1),
+  }),
+  effects: (_set, get) => [() => console.log(get.count)],
   props: { count: 0 },
 });
 
 const Name = () => <h1>Watch me also change name here: {globalState.name}</h1>;
 
-const Home = () => {
-  const [state, { inc }] = useProvider();
+const App = () => {
+  const [state, actions] = useProvider();
 
   return (
     <>
-      <Title>Home</Title>
-
       <h1>
         My name is: {globalState.name} and I'm: {globalSignal()}
       </h1>
@@ -30,54 +27,20 @@ const Home = () => {
 
       <button
         onClick={() => {
-          setGlobalState('name', 'world');
-          setGlobalSignal(22);
+          setGlobalState('name', (name) => (name === 'Alexandre' ? 'Alex' : 'Alexandre'));
+          setGlobalSignal(globalSignal() === 20 ? 22 : 20);
         }}
       >
-        Change name to 'world' and my age to '22'
+        Toggle name between 'Alex' and 'Alexandre' and my age between '22' and '20'
       </button>
 
       <hr />
 
-      <button onClick={inc}>
+      <button onClick={actions.inc}>
         Count from provider:{state.count} (open the console to see the effect)
       </button>
     </>
   );
 };
 
-const About = () => (
-  <>
-    <Title>About</Title>
-    <h1>About</h1>
-  </>
-);
-
-const App: Component<{ name: string }> = (props) => {
-  return (
-    <>
-      <Link href="/">Home</Link>
-      <Link href="/about">About</Link>
-      <hr />
-      <h1>Global name {props.name}</h1>
-      <Route />
-    </>
-  );
-};
-
-const routes: RouteDefinition[] = [
-  {
-    path: '/',
-    component: Home,
-  },
-  {
-    path: '/about',
-    component: About,
-  },
-];
-
-createApp(App, { name: 'Alexandre' })
-  .use(Router, { routes })
-  .use(MetaProvider)
-  .use(Provider)
-  .mount('#app');
+createApp(App, {}).use(Provider).mount('#app');
