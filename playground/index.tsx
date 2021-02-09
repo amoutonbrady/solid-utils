@@ -1,5 +1,8 @@
 import { createApp, createStore, createGlobalState, createGlobalSignal } from '../src';
 
+import { Router, Route } from 'solid-app-router'
+import { Meta, MetaProvider, Title } from 'solid-meta'
+
 const [globalState, setGlobalState] = createGlobalState({ name: 'Alexandre' });
 const [globalSignal, setGlobalSignal] = createGlobalSignal(20);
 
@@ -14,11 +17,13 @@ const [Provider, useProvider] = createStore({
 
 const Name = () => <h1>Watch me also change name here: {globalState.name}</h1>;
 
-const App = () => {
+const Home = () => {
   const [state, actions] = useProvider();
 
   return (
     <>
+      <Title>Hello world!</Title>
+
       <h1>
         My name is: {globalState.name} and I'm: {globalSignal()}
       </h1>
@@ -43,4 +48,16 @@ const App = () => {
   );
 };
 
-createApp(App, {}).use(Provider).mount('#app');
+const App = () => <>
+  <Meta name="keywords" content="javascript solid ui framework" />
+  <Route />
+</>
+
+const routes = [
+  {
+    component: Home,
+    path: '/'
+  }
+]
+
+createApp(App, {}).use(MetaProvider).use(Router, { routes }).use(Provider).mount('#app');
