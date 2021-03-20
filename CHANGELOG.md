@@ -1,5 +1,25 @@
 # Changelog
 
+<a name="0.5.0"></a>
+## 0.5.0 (2021-03-20)
+
+### Added
+
+- ✨ Move to rollup-preset-solid [[3ba165a](https://github.com/amoutonbrady/solid-utils/commit/3ba165a2ed7463c0343f9323220bf40a71cff669)]
+
+
+<a name="0.4.1"></a>
+## 0.4.1 (2021-02-09)
+
+### Changed
+
+- ⬆️ Update dependencies [[9e4da75](https://github.com/amoutonbrady/solid-utils/commit/9e4da757324df8b16eca4b25b348cf35dbe56f19)]
+
+### Miscellaneous
+
+- 📝 Update changelog [[52a08a5](https://github.com/amoutonbrady/solid-utils/commit/52a08a55baa61a873fb4c7fd45940865b5718684)]
+
+
 <a name="0.4.0"></a>
 ## 0.4.0 (2021-02-04)
 
