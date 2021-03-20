@@ -1,16 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "outDir": "dist/source",
-    "declaration": true,
-    "declarationDir": "dist/types"
-  },
-  "include": ["src"]
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node"
+  }
 }

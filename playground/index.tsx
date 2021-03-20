@@ -1,7 +1,7 @@
-import { createApp, createStore, createGlobalState, createGlobalSignal } from '../src';
+import { createApp, createStore, createGlobalState, createGlobalSignal } from '..';
 
-import { Router, Route } from 'solid-app-router'
-import { Meta, MetaProvider, Title } from 'solid-meta'
+import { Router, Route } from 'solid-app-router';
+import { Meta, MetaProvider, Title } from 'solid-meta';
 
 const [globalState, setGlobalState] = createGlobalState({ name: 'Alexandre' });
 const [globalSignal, setGlobalSignal] = createGlobalSignal(20);
@@ -48,16 +48,18 @@ const Home = () => {
   );
 };
 
-const App = () => <>
-  <Meta name="keywords" content="javascript solid ui framework" />
-  <Route />
-</>
+const App = () => (
+  <>
+    <Meta name="keywords" content="javascript solid ui framework" />
+    <Route />
+  </>
+);
 
 const routes = [
   {
     component: Home,
-    path: '/'
-  }
-]
+    path: '/',
+  },
+];
 
 createApp(App, {}).use(MetaProvider).use(Router, { routes }).use(Provider).mount('#app');

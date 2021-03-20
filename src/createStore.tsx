@@ -1,16 +1,14 @@
+import type { Component, SetStateFunction, State } from 'solid-js';
 import {
   createState,
   createContext,
   useContext,
-  Component,
   splitProps,
-  Show,
-  State,
-  SetStateFunction,
   mergeProps,
   createSignal,
   createComputed,
 } from 'solid-js';
+import { Show } from 'solid-js/web';
 
 type BaseObject = Record<string, any>;
 
@@ -130,6 +128,7 @@ export function createStore<
     }).then(setValue);
 
     return (
+      // FIXME: This <Show> will break async SSR
       <Show when={!!value()} fallback={finalProps.loader || DefaultLoader}>
         <Context.Provider value={value()}>{internal.children}</Context.Provider>
       </Show>
