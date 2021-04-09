@@ -1,4 +1,4 @@
-import { createApp, createStore, createGlobalState, createGlobalSignal } from '..';
+import { createApp, createStore, createGlobalState, createGlobalSignal } from 'solid-utils';
 
 import { Router, Route } from 'solid-app-router';
 import { Meta, MetaProvider, Title } from 'solid-meta';
@@ -17,7 +17,7 @@ const [Provider, useProvider] = createStore({
 
 const Name = () => <h1>Watch me also change name here: {globalState.name}</h1>;
 
-const Home = () => {
+const Hoooome = () => {
   const [state, actions] = useProvider();
 
   return (
@@ -57,7 +57,7 @@ const App = () => (
 
 const routes = [
   {
-    component: Home,
+    component: Hoooome,
     path: '/',
   },
 ];

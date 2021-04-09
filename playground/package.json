@@ -18,6 +18,7 @@
   "dependencies": {
     "solid-app-router": "^0.0.37",
     "solid-js": "^0.25.1",
-    "solid-meta": "^0.25.1"
+    "solid-meta": "^0.25.1",
+    "solid-utils": "link:.."
   }
 }

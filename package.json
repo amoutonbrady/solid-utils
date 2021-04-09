@@ -40,6 +40,6 @@
     "solid-js": "^0.25.1"
   },
   "peerDependencies": {
-    "solid-js": "^0.2"
+    "solid-js": "^0.25"
   }
 }
