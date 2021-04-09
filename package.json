@@ -35,11 +35,11 @@
   "license": "MIT",
   "devDependencies": {
     "prettier": "^2.2.1",
-    "rollup": "^2.42.1",
+    "rollup": "^2.45.0",
     "rollup-preset-solid": "^0.3.0",
-    "solid-js": "^0.24.15"
+    "solid-js": "^0.25.1"
   },
   "peerDependencies": {
-    "solid-js": "^0.24"
+    "solid-js": "^0.2"
   }
 }
