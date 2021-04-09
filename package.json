@@ -1,6 +1,6 @@
 {
   "name": "solid-utils",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Your best companion for any solid project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
