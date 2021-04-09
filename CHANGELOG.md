@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="0.6.0"></a>
+## 0.6.0 (2021-04-09)
+
+### Changed
+
+- ⬆️ Update dependencies [[c6b12f3](https://github.com/amoutonbrady/solid-utils/commit/c6b12f3cf24f872e6c84320b833323e6e3ea39ba)]
+
+### Miscellaneous
+
+- 📝 Update changelog [[e09ab1d](https://github.com/amoutonbrady/solid-utils/commit/e09ab1d3c0d579903fc0a94fdbad120f96ce2779)]
+
+
 <a name="0.5.0"></a>
 ## 0.5.0 (2021-03-20)
 
