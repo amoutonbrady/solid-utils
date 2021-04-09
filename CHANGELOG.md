@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="0.6.1"></a>
+## 0.6.1 (2021-04-09)
+
+### Fixed
+
+- 🐛 Fix peerDependencies range [[22fa5de](https://github.com/amoutonbrady/solid-utils/commit/22fa5deda33331617c3ed38db5f94cf0e72a0518)]
+
+### Miscellaneous
+
+- 📝 Update changelog [[4db59e4](https://github.com/amoutonbrady/solid-utils/commit/4db59e4510a706ec2a30b6063b0be9c62caf4d65)]
+
+
 <a name="0.6.0"></a>
 ## 0.6.0 (2021-04-09)
 
