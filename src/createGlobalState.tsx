@@ -1,4 +1,5 @@
-import { createRoot, createState, SetStateFunction, State } from 'solid-js';
+import { createRoot, SetStateFunction, State } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
 interface Options {
   name?: string;
@@ -16,7 +17,7 @@ export function createGlobalState<TState>(state: TState, options?: Options) {
   let globalState: [State<TState>, SetStateFunction<TState>];
 
   createRoot(() => {
-    globalState = createState(state, options);
+    globalState = createStore(state, options);
   });
 
   return globalState;

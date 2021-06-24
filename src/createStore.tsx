@@ -1,6 +1,5 @@
 import type { Component, SetStateFunction, State } from 'solid-js';
 import {
-  createState,
   createContext,
   useContext,
   splitProps,
@@ -8,6 +7,7 @@ import {
   createSignal,
   createComputed,
 } from 'solid-js';
+import { createStore as createState } from 'solid-js/store';
 import { Show } from 'solid-js/web';
 
 type BaseObject = Record<string, any>;
