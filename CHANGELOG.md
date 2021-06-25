@@ -1,5 +1,32 @@
 # Changelog
 
+<a name="0.8.0-rc.0"></a>
+## 0.8.0-rc.0 (2021-06-25)
+
+### Changed
+
+- ⬆️ Update dependencies (to RC) [[65445e5](https://github.com/amoutonbrady/solid-utils/commit/65445e5c75ca7e6ee0768d613549599ed4a78e31)]
+
+### Miscellaneous
+
+-  Merge pull request [#1](https://github.com/amoutonbrady/solid-utils/issues/1) from davedbase/master [[b65b755](https://github.com/amoutonbrady/solid-utils/commit/b65b75525982a966ac4919be2f752199a9dccd98)]
+-  Oops forgot to bump Solid version [[f678e96](https://github.com/amoutonbrady/solid-utils/commit/f678e96b87a4721fb1cb2233e0765f7503ba7d08)]
+-  Remove the silly lock file [[bbef783](https://github.com/amoutonbrady/solid-utils/commit/bbef7835f8855d326cf916f8aaf595b11af644ba)]
+-  Changed createState to createStore [[7478559](https://github.com/amoutonbrady/solid-utils/commit/74785593b5a3c498fdd5f65a1735f42b4e23de01)]
+
+
+<a name="0.7.0"></a>
+## 0.7.0 (2021-04-10)
+
+### Changed
+
+- ⬆️ Update dependencies [[9205685](https://github.com/amoutonbrady/solid-utils/commit/9205685c8307b719d1c4515d256ed9dde37fa29e)]
+
+### Miscellaneous
+
+- 📝 Update changelog [[44245a7](https://github.com/amoutonbrady/solid-utils/commit/44245a78bc196e281a95c6fc84ae05cdbca16385)]
+
+
 <a name="0.6.1"></a>
 ## 0.6.1 (2021-04-09)
 
