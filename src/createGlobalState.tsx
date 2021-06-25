@@ -1,5 +1,5 @@
-import { createRoot, SetStateFunction, State } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createRoot } from 'solid-js';
+import { createStore, SetStoreFunction, Store } from 'solid-js/store';
 
 interface Options {
   name?: string;
@@ -14,7 +14,7 @@ interface Options {
  * @param options - See [official doc](https://github.com/ryansolid/solid/blob/master/documentation/api.md#createstateinitvalue-state-setstate)
  */
 export function createGlobalState<TState>(state: TState, options?: Options) {
-  let globalState: [State<TState>, SetStateFunction<TState>];
+  let globalState: [Store<TState>, SetStoreFunction<TState>];
 
   createRoot(() => {
     globalState = createStore(state, options);

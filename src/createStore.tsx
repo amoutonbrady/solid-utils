@@ -1,4 +1,4 @@
-import type { Component, SetStateFunction, State } from 'solid-js';
+import type { Component } from 'solid-js';
 import {
   createContext,
   useContext,
@@ -7,7 +7,11 @@ import {
   createSignal,
   createComputed,
 } from 'solid-js';
-import { createStore as createState } from 'solid-js/store';
+import {
+  createStore as createState,
+  SetStoreFunction as SetStateFunction,
+  Store as State,
+} from 'solid-js/store';
 import { Show } from 'solid-js/web';
 
 type BaseObject = Record<string, any>;
@@ -125,7 +129,7 @@ export function createStore<
       actions,
       effects,
       props: (external as unknown) as Props,
-    }).then(setValue);
+    }).then((value: Return) => setValue(value));
 
     return (
       // FIXME: This <Show> will break async SSR

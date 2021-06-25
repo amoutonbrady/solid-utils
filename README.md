@@ -56,13 +56,13 @@ You can find examples that outline all the utilities in the [playground](./playg
 
 ### createGlobalState
 
-A wrapper around `createState` that allows you to declare it at the global level.
+A wrapper around `createStore` that allows you to declare it at the global level.
 This essentially work by being managed in its own reactive context, removing the needs to be within your application.
 
 Although this can be useful and seem to be the better approach, there's a reason this wasn't part of core.
 This should act as an escape hatch for those who migrate from more permissive libraries such as `react`, `vue` or `svelte`.
 
-This accept the exact same parameters than `createState` from `solid-js`.
+This accept the exact same parameters than `createStore` from `solid-js`.
 
 #### Basic usage
 
