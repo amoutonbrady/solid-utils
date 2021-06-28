@@ -1,6 +1,6 @@
 {
   "name": "solid-utils",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Your best companion for any solid project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -41,6 +41,6 @@
     "solid-js": "^1.0.0"
   },
   "peerDependencies": {
-    "solid-js": ">= 0.26"
+    "solid-js": ">= 1.0"
   }
 }
