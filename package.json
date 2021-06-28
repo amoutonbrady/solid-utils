@@ -1,6 +1,6 @@
 {
   "name": "solid-utils",
-  "version": "0.8.0-rc.0",
+  "version": "0.8.0",
   "description": "Your best companion for any solid project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -34,11 +34,11 @@
   "author": "Alexandre Mouton-Brady",
   "license": "MIT",
   "devDependencies": {
-    "babel-preset-solid": "^1.0.0-rc.9",
-    "prettier": "^2.3.1",
+    "babel-preset-solid": "^1.0.0",
+    "prettier": "^2.3.2",
     "rollup": "^2.52.3",
     "rollup-preset-solid": "^0.3.0",
-    "solid-js": "^1.0.0-rc.9"
+    "solid-js": "^1.0.0"
   },
   "peerDependencies": {
     "solid-js": ">= 0.26"
