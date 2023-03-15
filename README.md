@@ -1,3 +1,7 @@
+> This package is archived and deprecated. Everything I wanted to do with this package has been done 10x better in the [solid-primitives packages](https://github.com/solidjs-community/solid-primitives).
+>
+> If you want to use the `solid-utils` package on NPM, feel free to poke me on twitter or sonmething.
+
 # solid-utils
 
 The ultimate companion of all your [solid-js](https://github.com/ryansolid/solid) applications.
